@@ -1,22 +1,37 @@
-# SOAR Phishing Incident Response Project
+# SOAR Phishing Incident Response Platform
 
-A Python-based SOAR (Security Orchestration, Automation, and Response) solution for automated phishing incident response. This project demonstrates a complete workflow for detecting, analyzing, and responding to phishing attempts through automated playbooks.
+A comprehensive SOAR (Security Orchestration, Automation, and Response) solution built with FastAPI for automated phishing incident response. This platform provides a complete workflow for detecting, analyzing, and responding to phishing attempts through automated playbooks and a modern web interface.
 
-## Features
+## ✨ Features
 
-- **IOC Extraction**: Automatically extracts Indicators of Compromise (IOCs) from email content
-- **Threat Intelligence Enrichment**: Enhances IOCs with reputation data
-- **Risk Scoring**: Calculates a risk score based on multiple factors
-- **Automated Response**: Takes action based on risk thresholds
-- **Simulation Mode**: Safe testing environment with simulation capabilities
+- **RESTful API**: Built with FastAPI for high performance and automatic OpenAPI documentation
+- **IOC Extraction**: Advanced extraction of Indicators of Compromise (IOCs) from email content
+- **Threat Intelligence**: Integration with threat intelligence feeds for IOC enrichment
+- **Risk Assessment**: Sophisticated risk scoring based on multiple threat factors
+- **Automated Response**: Playbook-based incident response
+- **Modern Web Interface**: Responsive React frontend with TypeScript
+- **Containerized Deployment**: Docker support for easy deployment
+- **CI/CD Pipeline**: GitHub Actions for automated testing and deployment
 
-## Project Structure
+## 🏗️ Project Structure
 
-- `extract_iocs.py`: Extracts IOCs (URLs, hashes, sender info) from email content
-- `enrich_iocs.py`: Enhances IOCs with threat intelligence data
-- `risk_score.py`: Calculates a risk score based on enriched IOCs
-- `isolate_account.py`: Contains account isolation functionality (simulated)
-- `playbook_demo.py`: Main demonstration script showing the complete workflow
+```
+soar-phishing/
+├── docker/                 # Docker configuration
+│   └── nginx/             # Nginx configuration
+├── frontend/              # React frontend
+│   ├── public/            # Static files
+│   ├── src/               # React source code
+│   └── Dockerfile         # Frontend Dockerfile
+├── src/                   # Backend source code
+│   ├── api/               # API routes and endpoints
+│   ├── core/              # Core business logic
+│   ├── db/                # Database models and migrations
+│   └── ...                # Other backend components
+├── .github/workflows/     # GitHub Actions workflows
+├── docker-compose.yml     # Docker Compose configuration
+└── Dockerfile             # Backend Dockerfile
+```
 
 ## How It Works
 
@@ -43,30 +58,140 @@ A Python-based SOAR (Security Orchestration, Automation, and Response) solution 
    - Medium-risk incidents are flagged for analyst review
    - Low-risk incidents are logged for monitoring
 
-## Prerequisites
+## 🚀 Quick Start with Docker
 
-- Python 3.6+
-- No external dependencies required (uses standard library only)
+### Prerequisites
 
-## Getting Started
+- Docker 20.10+
+- Docker Compose 2.0+
+- Node.js 16+ (for frontend development)
+
+### Running with Docker Compose
 
 1. Clone the repository:
    ```bash
-   git clone <repository-url>
-   cd soar_phishing_project
+   git clone https://github.com/yourusername/soar-phishing.git
+   cd soar-phishing
    ```
 
-2. Run the demo:
+2. Create and configure the environment file:
    ```bash
-   python playbook_demo.py
+   cp .env.example .env
+   # Edit .env with your configuration
    ```
 
-## Customization
+3. Start the application:
+   ```bash
+   docker-compose up --build
+   ```
 
-- Modify `playbook_demo.py` to use your own email content and headers
-- Adjust risk scoring thresholds in `risk_score.py`
-- Implement real API calls in `enrich_iocs.py` for production use
-- Replace simulation in `isolate_account.py` with actual account isolation logic
+4. Access the application:
+   - API: http://localhost:8000
+   - API Documentation: http://localhost:8000/docs
+   - Frontend: http://localhost:3000
+
+## 🛠️ Development
+
+### Running Tests
+
+```bash
+# Backend tests
+pytest
+
+# Frontend tests
+cd frontend
+npm test
+```
+
+### Code Formatting
+
+```bash
+# Backend
+black .
+isort .
+flake8
+mypy .
+
+# Frontend
+cd frontend
+npm run format
+npm run lint
+```
+
+### Database Migrations
+
+Create a new migration:
+```bash
+alembic revision --autogenerate -m "Your migration message"
+```
+
+Apply migrations:
+```bash
+alembic upgrade head
+```
+
+### Building for Production
+
+```bash
+# Build and start all services in production mode
+docker-compose -f docker-compose.prod.yml up --build -d
+```
+
+## 🔧 Configuration
+
+### Environment Variables
+
+Create a `.env` file in the root directory with the following variables:
+
+```env
+# Database
+POSTGRES_USER=soar
+POSTGRES_PASSWORD=soar_password
+POSTGRES_DB=soar_phishing
+
+# Backend
+SECRET_KEY=your-secret-key-here
+ALGORITHM=HS256
+ACCESS_TOKEN_EXPIRE_MINUTES=30
+DATABASE_URL=postgresql://soar:soar_password@db:5432/soar_phishing
+
+# Frontend
+REACT_APP_API_URL=http://localhost:8000
+```
+
+### Running Locally (Development)
+
+1. Start the backend services:
+   ```bash
+   docker-compose up -d db
+   ```
+
+2. Set up the backend:
+   ```bash
+   # Install dependencies
+   poetry install
+
+   # Run database migrations
+   alembic upgrade head
+
+   # Start the development server
+   uvicorn src.main:app --reload
+   ```
+
+3. Start the frontend:
+   ```bash
+   cd frontend
+   npm install
+   npm start
+   ```
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
 ## Example Output
 
@@ -86,11 +211,32 @@ Risk Score: 100
 [SIMULATION] MFA enforced.
 ```
 
-## Security Note
+## 🔒 Security
 
-This is a demonstration project. For production use:
-- Implement proper error handling
-- Add logging
-- Secure sensitive data
-- Use real threat intelligence feeds
-- Follow your organization's security policies
+This project includes security features such as:
+- JWT-based authentication
+- Password hashing with bcrypt
+- CORS protection
+- Input validation with Pydantic
+- Secure database session management
+
+### Security Best Practices
+
+For production deployment:
+- Use HTTPS in production
+- Set appropriate CORS policies
+- Rotate secrets regularly
+- Implement rate limiting
+- Keep dependencies up to date
+- Follow the principle of least privilege for database access
+- Monitor and log security events
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- Built with [FastAPI](https://fastapi.tiangolo.com/)
+- Database powered by [SQLAlchemy](https://www.sqlalchemy.org/) and [Alembic](https://alembic.sqlalchemy.org/)
+- Frontend built with [React](https://reactjs.org/) (in development)
